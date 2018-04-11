@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- Trigger the modal with a button -->
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Skapa kund</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Fyll i kunduppgifter</h4>
+            </div>
+            <div class="modal-body">
+                <form th:object="${kundForm}" method="post">
+                    <div class="form-group">
+                        <label>Personnummer:</label>
+                        <input th:value="*{personnummer}" name="personnummer" type="text" class="form-control"
+                               id="personnummer">
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('personnummer')}"
+                              th:errors="*{personnummer}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Namn:</label>
+                        <input th:value="*{namn}" name="namn" type="text" class="form-control" id="namn">
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('namn')}"
+                              th:errors="*{namn}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Address:</label>
+                        <input th:value="*{address}" name="address" type="text" class="form-control" id="address">
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('address')}"
+                              th:errors="*{address}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefonnummer:</label>
+                        <input th:value="*{telefonnummer}" name="telefonnummer" type="number" class="form-control"
+                               id="telefonnummer">
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('telefonnummer')}"
+                              th:errors="*{telefonnummer}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Epost:</label>
+                        <input th:value="*{epost}" name="epost" type="email" class="form-control" id="epost">
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('epost')}" th:errors="*{epost}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Postnummer:</label>
+                        <input th:value="*{postnummer}" name="postnummer" type="text" class="form-control" id="postnummer">
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('postnummer')}"
+                              th:errors="*{postnummer}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Stad:</label>
+                        <input th:value="*{stad}" name="stad" type="text" class="form-control" id="stad">
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('stad')}" th:errors="*{stad}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Land:</label>
+                        <input th:value="*{land}" name="land" type="text" class="form-control" id="land">
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('land')}" th:errors="*{land}"></span>
+                    </div>
+                    <button value="addKund" type="submit" class="btn btn-default">Skapa kund</button>
+                </form>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="custom_main">
+    <div id="add_custom">
+
+    </div>
+    <div id="custom_table">
+        <table class="table table-striped">
+            <tr>
+                <th>Personnumer</th>
+                <th>Namn</th>
+                <th>Address</th>
+                <th>Telefonnummer</th>
+                <th>Epost</th>
+                <th>Postnummer</th>
+                <th>Stad</th>
+                <th>Land</th>
+            </tr>
+            <th:block th:each="kund : ${kunder}">
+                <tr th:object="${kund}">
+                    <td th:text="*{personnummer}"></td>
+                    <td th:text="*{namn}"></td>
+                    <td th:text="*{address}"></td>
+                    <td th:text="*{telefonnummer}"></td>
+                    <td th:text="*{epost}"></td>
+                    <td th:text="*{postnummer}"></td>
+                    <td th:text="*{stad}"></td>
+                    <td th:text="*{land}"></td>
+                </tr>
+            </th:block>
+        </table>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

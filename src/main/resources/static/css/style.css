@@ -1,0 +1,28 @@
+#custom_main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#header_image {
+    margin-left: 350px;
+}
+
+#custom_header {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+
+
+#add_custom {
+    margin-right: 50px;
+    margin-left: 20px;
+}
+
+#custom_table {
+    display: flex;
+    flex-grow: 3;
+}
+
