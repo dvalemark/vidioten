@@ -8,30 +8,12 @@
     <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
 <body>
-<header id="custom_header">
-    <form method="get">
-        <div class="container">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Tables
-                    <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="/students">Students</a></li>
-                    <li class="disabled"><a href="/employees">Employees</a></li>
-                    <li class="active"><a href="#">Courses</a></li>
-                </ul>
-            </div>
-        </div>
-    </form>
-    <img id="header_image" th:src="@{/images/logo.png}">
-</header>
-
+<h1 class="text-center">Kunder</h1>
 <!-- Trigger the modal with a button -->
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Skapa kund</button>
-
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addCustomer">Skapa kund</button>
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="addCustomer" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -69,79 +51,72 @@
                     <div class="form-group">
                         <label>Epost:</label>
                         <input th:value="*{epost}" name="epost" type="email" class="form-control" id="epost">
-                        <span class="alert-danger alert" th:if="${#fields.hasErrors('epost')}" th:errors="*{epost}"></span>
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('epost')}"
+                              th:errors="*{epost}"></span>
                     </div>
                     <div class="form-group">
                         <label>Postnummer:</label>
-                        <input th:value="*{postnummer}" name="postnummer" type="text" class="form-control" id="postnummer">
+                        <input th:value="*{postnummer}" name="postnummer" type="text" class="form-control"
+                               id="postnummer">
                         <span class="alert-danger alert" th:if="${#fields.hasErrors('postnummer')}"
                               th:errors="*{postnummer}"></span>
                     </div>
                     <div class="form-group">
                         <label>Stad:</label>
                         <input th:value="*{stad}" name="stad" type="text" class="form-control" id="stad">
-                        <span class="alert-danger alert" th:if="${#fields.hasErrors('stad')}" th:errors="*{stad}"></span>
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('stad')}"
+                              th:errors="*{stad}"></span>
                     </div>
                     <div class="form-group">
                         <label>Land:</label>
                         <input th:value="*{land}" name="land" type="text" class="form-control" id="land">
-                        <span class="alert-danger alert" th:if="${#fields.hasErrors('land')}" th:errors="*{land}"></span>
+                        <span class="alert-danger alert" th:if="${#fields.hasErrors('land')}"
+                              th:errors="*{land}"></span>
                     </div>
                     <button value="addKund" type="submit" class="btn btn-default">Skapa kund</button>
                 </form>
-
-
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
+<form>
 
-<div id="custom_main">
-    <div id="add_custom">
 
-    </div>
-    <div id="custom_table">
-        <table class="table table-striped">
-            <tr>
-                <th>Personnumer</th>
-                <th>Namn</th>
-                <th>Address</th>
-                <th>Telefonnummer</th>
-                <th>Epost</th>
-                <th>Postnummer</th>
-                <th>Stad</th>
-                <th>Land</th>
-            </tr>
-            <th:block th:each="kund : ${kunder}">
-                <tr th:object="${kund}">
-                    <td th:text="*{personnummer}"></td>
-                    <td th:text="*{namn}"></td>
-                    <td th:text="*{address}"></td>
-                    <td th:text="*{telefonnummer}"></td>
-                    <td th:text="*{epost}"></td>
-                    <td th:text="*{postnummer}"></td>
-                    <td th:text="*{stad}"></td>
-                    <td th:text="*{land}"></td>
+    <div id="custom_main">
+        <div id="add_custom">
+        </div>
+        <div id="custom_table">
+            <table class="table table-hover">
+                <tr>
+                    <th>Personnumer</th>
+                    <th>Namn</th>
+                    <th>Telefonnummer</th>
+                    <th>Filmer</th>
                 </tr>
-            </th:block>
-        </table>
+                <th:block th:each="kund : ${kunder}">
+                    <tr class="clickable" th:object="${kund}">
+                        <td th:text="*{personnummer}"></td>
+                        <td th:text="*{namn}"></td>
+                        <td th:text="*{telefonnummer}"></td>
+                        <td th:text="*{filmer.size()}"></td>
+                        <td><a th:href="@{/kunder/byId/} + ${kund.personnummer}" class="btn btn-primary">Info</a></td>
+                    </tr>
+                </th:block>
+            </table>
+        </div>
     </div>
 
-</div>
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
 </body>
 </html>

@@ -70,10 +70,6 @@ public class Kund {
         this.namn = namn;
     }
 
-    public String getName() {
-        return namn;
-    }
-
     public void setName(String name) {
         this.namn = name;
     }
