@@ -7,6 +7,43 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="../static/css/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand">Vidioten</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="kunder">Kunder <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="uthyrningar">Uthyrda Filmer</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Filmer
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="filmer">Alla</a>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Deckare</a>
+                        <a class="dropdown-item" href="#">Drama</a>
+                        <a class="dropdown-item" href="#">Komedi</a>
+                        <a class="dropdown-item" href="#">Romantik</a>
+                        <a class="dropdown-item" href="#">Thriller</a>
+                    </div>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Sök" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sök</button>
+            </form>
+        </div>
+    </nav>
+</header>
 <body>
 <h1 class="text-center">Kunder</h1>
 <!-- Trigger the modal with a button -->
@@ -82,7 +119,7 @@
         </div>
     </div>
 </div>
-<form>
+</form>
 
 
     <div id="custom_main">
@@ -119,4 +156,11 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 </body>
+<footer class="footer">
+    <div class="container">
+        <nav class="navbar fixed-bottom navbar-light bg-light">
+            <a class="navbar-brand" href="#">&copy; Vidioten</a>
+        </nav>
+    </div>
+</footer>
 </html>
