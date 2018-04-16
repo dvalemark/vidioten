@@ -60,7 +60,6 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Fyll i filmuppgifter</h4>
             </div>
             <div class="modal-body">
@@ -83,20 +82,26 @@
                         <label>Utgivningsdatum:</label>
                         <input th:value="*{utgivningsdatum}" name="utgivningsdatum" type="date" class="form-control"
                                id="utgivningsdatum">
-
                     </div>
                     <div class="form-group">
                         <label>Kategori:</label>
-                        <input th:value="*{kategori}" name="kategori" type="text" class="form-control"
-                               id="kategori">
-                        <span class="alert-danger alert" th:if="${#fields.hasErrors('kategori')}"
-                              th:errors="*{kategori}"></span>
+                        <select th:value="*{kategori}" name="kategori">
+                            <option value="KOMEDI">KOMEDI</option>
+                            <option value="ACTION">ACTION</option>
+                            <option value="ROMANTIK">ROMANTIK</option>
+                            <option value="DRAMA">DRAMA</option>
+                            <option value="THRILLER">THRILLER</option>
+                            <option value="SKRÄCK">SKRÄCK</option>
+                            <option value="DECKARE">DECKARE</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Format:</label>
-                        <input th:value="*{format}" name="format" type="text" class="form-control" id="format">
-                        <span class="alert-danger alert" th:if="${#fields.hasErrors('format')}"
-                              th:errors="*{format}"></span>
+                            <select th:value="*{format}" name="format">
+                                <option value="DVD">DVD</option>
+                                <option value="VHS">VHS</option>
+                                <option value="BLURAY">BLURAY</option>
+                            </select>
                     </div>
                     <button value="addFilm" type="submit" class="btn btn-default">Skapa film</button>
                 </form>
@@ -117,6 +122,7 @@
                 <tr>
                     <th>Produktnummer</th>
                     <th>Namn</th>
+                    <th>Kategori</th>
                     <th>Format</th>
                     <th>Uthyrd</th>
                 </tr>
@@ -124,6 +130,7 @@
                     <tr class="clickable" th:object="${film}">
                         <td th:text="*{produktnummer}"></td>
                         <td th:text="*{namn}"></td>
+                        <td th:text="*{kategori}"></td>
                         <td th:text="*{format}"></td>
                         <td th:switch="*{kund}">
                         <button th:case="NULL" class="btn btn-outline-primary" data-toggle="modal" th:data-target="'#rentmovie' + *{produktnummer}">Rent movie</button>
