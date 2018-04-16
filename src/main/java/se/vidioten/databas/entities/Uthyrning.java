@@ -2,6 +2,8 @@ package se.vidioten.databas.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "Uthyrning")
@@ -81,5 +83,17 @@ public class Uthyrning {
 
     public void setSenasteInlamning(Date senasteInlamning) {
         this.senasteInlamning = senasteInlamning;
+    }
+
+    public boolean checkIfLate() {
+        Date uthyrningsdatum = this.uthyrningsdatum;
+        Date today = Date.valueOf(LocalDate.now());
+        long days = ChronoUnit.DAYS.between(uthyrningsdatum.toLocalDate(), today.toLocalDate());
+        System.out.println(days);
+        if (days > 1 && inlamningsdatum == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

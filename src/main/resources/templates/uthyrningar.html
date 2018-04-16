@@ -51,6 +51,16 @@
     <link href="../static/css/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>-->
 <body>
+<form method="get">
+<select name="alternativ">
+    <option value="Alla">Alla</option>
+    <option value="Uthyrda">Uthyrda</option>
+    <option value="Försenade">Försenade</option>
+    <option value="Gammla">Gammla uthyrningar</option>
+</select>
+    <input type="submit" value="Sök"/>
+</form>
+
 <h1 class="text-center">Uthyrningar</h1>
 
 <div id="custom_main">
@@ -65,10 +75,9 @@
                 <th>Uthyrningsdatum</th>
                 <th>Förväntat inlämningsdatum</th>
                 <th>inlämningsdatum</th>
-                <th>Försenad</th>
             </tr>
             <th:block th:each="uthyrning : ${uthyrningar}">
-                <tr class="clickable" th:object="${uthyrning}">
+                <tr class="clickable" th:object="${uthyrning}" th:style="${uthyrning.checkIfLate()} ? 'color: red' : ' color: green'">
                     <td th:text="*{uthyrningsID}"></td>
                     <td th:text="*{film.namn}"></td>
                     <td th:text="*{kund.personnummer}"></td>
