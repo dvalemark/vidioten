@@ -29,7 +29,7 @@ public class Kund {
 
     private List<Uthyrning> uthyrningar;
 
-    protected Kund() {
+    public Kund() {
 
     }
 
@@ -52,7 +52,6 @@ public class Kund {
     public void setUthyrningar(List<Uthyrning> uthyrningar) {
         this.uthyrningar = uthyrningar;
     }
-
     @Id
     public String getPersonnummer() {
         return personnummer;

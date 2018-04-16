@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Customer</title>
+</head>
+<!--<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/css/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>-->
+<body>
+<h1 class="text-center">Uthyrningar</h1>
+
+<div id="custom_main">
+    <div id="add_custom">
+    </div>
+    <div id="custom_table">
+        <table class="table table-hover">
+            <tr>
+                <th>UthyrningsId</th>
+                <th>Film</th>
+                <th>Kund</th>
+                <th>Uthyrningsdatum</th>
+                <th>Förväntat inlämningsdatum</th>
+                <th>inlämningsdatum</th>
+                <th>Försenad</th>
+            </tr>
+            <th:block th:each="uthyrning : ${uthyrningar}">
+                <tr class="clickable" th:object="${uthyrning}">
+                    <td th:text="*{uthyrningsID}"></td>
+                    <td th:text="*{film.namn}"></td>
+                    <td th:text="*{kund.personnummer}"></td>
+                    <td th:text="*{uthyrningsdatum}"></td>
+                    <td th:text="*{senasteInlamning}"></td>
+                    <td th:text="*{inlamningsdatum}"></td>
+                </tr>
+            </th:block>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

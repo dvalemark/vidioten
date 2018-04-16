@@ -1,61 +1,32 @@
-package se.vidioten.databas.entities;
+package se.vidioten.databas.forms;
 
+import se.vidioten.databas.entities.Kund;
 import se.vidioten.databas.enums.Format;
 import se.vidioten.databas.enums.Kategori;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Date;
-import java.util.List;
 
-
-@Entity
-@Table(name = "Film")
-public class Film {
-
-
-    private long produktnummer;
-
+public class FilmForm {
+    private Long produktnummer;
+    @NotNull
+    @Size(min = 5, max = 50)
     private String namn;
-
+    @NotNull
+    @Size(min = 5, max = 200)
     private String beskrivning;
-
+    @NotNull
     private Date utgivningsdatum;
-
     private Kategori kategori;
-
     private Format format;
-
     private Kund kund;
 
-    private List<Uthyrning> uthyrningar;
-
-    protected Film() {
-
-    }
-
-    public Film(String namn, String beskrivning, Date utgivningsdatum, Kategori kategori, Format format) {
-        this.namn = namn;
-        this.beskrivning = beskrivning;
-        this.utgivningsdatum = utgivningsdatum;
-        this.kategori = kategori;
-        this.format = format;
-    }
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "film")
-    public List<Uthyrning> getUthyrningar() {
-        return uthyrningar;
-    }
-
-    public void setUthyrningar(List<Uthyrning> uthyrningar) {
-        this.uthyrningar = uthyrningar;
-    }
-
-    @Id
-    @GeneratedValue
-    public long getProduktnummer() {
+    public Long getProduktnummer() {
         return produktnummer;
     }
 
-    public void setProduktnummer(long produktnummer) {
+    public void setProduktnummer(Long produktnummer) {
         this.produktnummer = produktnummer;
     }
 
@@ -99,7 +70,6 @@ public class Film {
         this.format = format;
     }
 
-    @ManyToOne
     public Kund getKund() {
         return kund;
     }

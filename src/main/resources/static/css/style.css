@@ -26,3 +26,17 @@
     flex-grow: 3;
 }
 
+.kund_body{
+    background-color: blue;
+    display: flex;
+    flex-direction: row;
+}
+.kund_main_left{
+    display: flex;
+    flex-direction: column;
+}
+.kund_main_right{
+    display: flex;
+    flex-direction: column;
+}
+

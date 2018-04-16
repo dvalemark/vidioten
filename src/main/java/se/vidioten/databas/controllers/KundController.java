@@ -1,6 +1,7 @@
 package se.vidioten.databas.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,11 +10,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import se.vidioten.databas.entities.Film;
 import se.vidioten.databas.entities.Kund;
+import se.vidioten.databas.entities.Uthyrning;
 import se.vidioten.databas.forms.KundForm;
+import se.vidioten.databas.repositories.FilmRepository;
 import se.vidioten.databas.repositories.KundRepository;
+import se.vidioten.databas.repositories.UthyrningRepository;
 
 import javax.validation.Valid;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequestMapping("/kunder")
@@ -21,6 +29,10 @@ public class KundController {
 
     @Autowired
     private KundRepository kundRepository;
+    @Autowired
+    private FilmRepository filmRepository;
+    @Autowired
+    private UthyrningRepository uthyrningRepository;
 
     @GetMapping("")
     public String getKunder(Model model, KundForm kundForm) {
@@ -48,10 +60,20 @@ public class KundController {
     public String deleteKund(@PathVariable String personnummer) {
         Kund kund = kundRepository.findByPersonnummer(personnummer);
         kundRepository.delete(kund);
-        System.out.println("DELETE");
-        System.out.println("DELETE");
-        System.out.println("DELETE");
-        System.out.println("DELETE");
+        return "redirect:/kunder";
+    }
+
+    @PostMapping("byId/return{personnummer}")
+    public String returnMovies(@PathVariable String personnummer) {
+        List<Film> filmer = filmRepository.findAllByKund_Personnummer(personnummer);
+        Date inlamingsdatum = Date.valueOf(LocalDate.now());
+        for (Film film : filmer) {
+            film.setKund(null);
+            filmRepository.save(film);
+            Uthyrning uthyrning = uthyrningRepository.findByFilmAndAndInlamningsdatumIsNull(film);
+            uthyrning.setInlamningsdatum(inlamingsdatum);
+            uthyrningRepository.save(uthyrning);
+        }
         return "redirect:/kunder";
     }
 
@@ -71,7 +93,6 @@ public class KundController {
             System.out.println("good");
             return "redirect:/kunder";
         }
-        System.out.println(bindingResult.getAllErrors());
         model.addAttribute("kunder", kundRepository.findAll());
         return "kunder";
     }

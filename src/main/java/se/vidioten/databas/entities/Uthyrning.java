@@ -1,11 +1,12 @@
 package se.vidioten.databas.entities;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "Uthyrning")
 public class Uthyrning {
+
 
     private long uthyrningsID;
 
@@ -15,17 +16,20 @@ public class Uthyrning {
 
     private Date uthyrningsdatum;
 
-    private Date inlämningsdatum;
+    private Date senasteInlamning;
+
+    private Date inlamningsdatum;
+
 
     protected Uthyrning() {
 
     }
 
-    public Uthyrning(Kund kund, Film film, Date uthyrningsdatum, Date inlämningsdatum) {
+    public Uthyrning(Kund kund, Film film, Date uthyrningsdatum, Date senasteInlamning) {
         this.kund = kund;
         this.film = film;
         this.uthyrningsdatum = uthyrningsdatum;
-        this.inlämningsdatum = inlämningsdatum;
+        this.senasteInlamning = senasteInlamning;
     }
     @Id
     @GeneratedValue
@@ -63,11 +67,19 @@ public class Uthyrning {
         this.uthyrningsdatum = uthyrningsdatum;
     }
 
-    public Date getInlämningsdatum() {
-        return inlämningsdatum;
+    public Date getInlamningsdatum() {
+        return inlamningsdatum;
     }
 
-    public void setInlämningsdatum(Date inlämningsdatum) {
-        this.inlämningsdatum = inlämningsdatum;
+    public void setInlamningsdatum(Date inlamningsdatum) {
+        this.inlamningsdatum = inlamningsdatum;
+    }
+
+    public Date getSenasteInlamning() {
+        return senasteInlamning;
+    }
+
+    public void setSenasteInlamning(Date senasteInlamning) {
+        this.senasteInlamning = senasteInlamning;
     }
 }

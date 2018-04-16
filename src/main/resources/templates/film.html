@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+            <h2>Film information</h2>
+        </div>
+
+        <div class="col-8">
+            <h2>Uthyrningshistorik</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <form th:object="${film}" class="form-horizontal" role="form" method="post">
+                <fieldset>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Namn</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="namn" th:value="*{namn}" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Beskrivning</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="beskrivning" th:value="*{beskrivning}" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Utgivningsdatum</label>
+                        <div class="col-sm-4">
+                            <input type="date" name="utgivningsdatum" th:value="*{utgivningsdatum}"
+                                   class="form-control">
+                        </div>
+
+                        <label class="col-sm-2 control-label">Kategori</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="kategori" th:value="*{kategori}" class="form-control">
+                        </div>
+                    </div>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Format</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="format" th:value="*{format}" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="pull-right">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <form th:object="${film}" th:action="@{/filmer/byId/delete} + *{produktnummer}" method="post">
+                <button value="deleteFilm" type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
