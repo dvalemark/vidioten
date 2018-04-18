@@ -1,10 +1,6 @@
 package se.vidioten.databas.entities;
 
-import se.vidioten.databas.enums.Format;
-import se.vidioten.databas.enums.Kategori;
-
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.List;
 
 
@@ -12,18 +8,21 @@ import java.util.List;
 @Table(name = "Film")
 public class Film {
 
-
     private long produktnummer;
 
     private String namn;
 
     private String beskrivning;
 
-    private Date utgivningsdatum;
+    private String utgivningsdatum;
 
-    private Kategori kategori;
+    private String kategori;
 
-    private Format format;
+    private String format;
+
+    private String bild;
+
+    private String imdb;
 
     private Kund kund;
 
@@ -33,7 +32,7 @@ public class Film {
 
     }
 
-    public Film(String namn, String beskrivning, Date utgivningsdatum, Kategori kategori, Format format) {
+    public Film(String namn, String beskrivning, String utgivningsdatum, String kategori, String format) {
         this.namn = namn;
         this.beskrivning = beskrivning;
         this.utgivningsdatum = utgivningsdatum;
@@ -75,27 +74,27 @@ public class Film {
         this.beskrivning = beskrivning;
     }
 
-    public Date getUtgivningsdatum() {
+    public String getUtgivningsdatum() {
         return utgivningsdatum;
     }
 
-    public void setUtgivningsdatum(Date utgivningsdatum) {
+    public void setUtgivningsdatum(String utgivningsdatum) {
         this.utgivningsdatum = utgivningsdatum;
     }
 
-    public Kategori getKategori() {
+    public String getKategori() {
         return kategori;
     }
 
-    public void setKategori(Kategori kategori) {
+    public void setKategori(String kategori) {
         this.kategori = kategori;
     }
 
-    public Format getFormat() {
+    public String getFormat() {
         return format;
     }
 
-    public void setFormat(Format format) {
+    public void setFormat(String format) {
         this.format = format;
     }
 
@@ -106,5 +105,21 @@ public class Film {
 
     public void setKund(Kund kund) {
         this.kund = kund;
+    }
+
+    public String getBild() {
+        return bild;
+    }
+
+    public void setBild(String bild) {
+        this.bild = bild;
+    }
+
+    public String getImdb() {
+        return imdb;
+    }
+
+    public void setImdb(String imdb) {
+        this.imdb = imdb;
     }
 }

@@ -90,7 +90,6 @@ public class KundController {
             kund.setNamn(k.getNamn());
             kund.setPostnummer(k.getPostnummer());
             kundRepository.save(kund);
-            System.out.println("good");
             return "redirect:/kunder";
         }
         model.addAttribute("kunder", kundRepository.findAll());

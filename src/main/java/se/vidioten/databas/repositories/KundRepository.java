@@ -9,4 +9,5 @@ import se.vidioten.databas.entities.Kund;
 public interface KundRepository extends JpaRepository<Kund,String> {
 
     Kund findByPersonnummer(String personnummer);
+
 }

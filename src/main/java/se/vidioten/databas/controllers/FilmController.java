@@ -1,5 +1,8 @@
 package se.vidioten.databas.controllers;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,10 +12,12 @@ import se.vidioten.databas.entities.Film;
 import se.vidioten.databas.entities.Kund;
 import se.vidioten.databas.entities.Uthyrning;
 import se.vidioten.databas.forms.FilmForm;
+import se.vidioten.databas.omdb.OmdbService;
 import se.vidioten.databas.repositories.FilmRepository;
 import se.vidioten.databas.repositories.KundRepository;
 import se.vidioten.databas.repositories.UthyrningRepository;
 
+import javax.swing.*;
 import javax.validation.Valid;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -43,6 +48,7 @@ public class FilmController {
 
     @PostMapping("")
     public String addFilm(Model model, @Valid FilmForm f, BindingResult bindingResult) {
+
         if (!bindingResult.hasErrors()) {
             filmRepository.save(new Film(f.getNamn(), f.getBeskrivning(), f.getUtgivningsdatum(), f.getKategori(), f.getFormat()));
             return "redirect:/filmer";
@@ -50,6 +56,30 @@ public class FilmController {
         System.out.println(bindingResult.getAllErrors());
         model.addAttribute("filmer", filmRepository.findAll());
         return "filmer";
+    }
+
+    @PostMapping("/imdb")
+    public String addFilmWithImdb(@RequestParam String title, Model model) {
+        OmdbService omdbService = new OmdbService();
+        String jsonResponse = omdbService.searchMovieByTitle(title, "1bff0c57");
+        if (!jsonResponse.isEmpty()) {
+            JSONObject r = null;
+            try {
+                r = omdbService.getMovieObject(jsonResponse);
+                System.out.println(r.getString("Title"));
+                Film film = new Film(r.getString("Title"), r.getString("Plot"), r.getString("Released"),
+                        r.getString("Genre").split(",")[0], "DVD");
+                film.setImdb(r.getString("imdbRating"));
+                film.setBild(r.getString("Poster"));
+                filmRepository.save(film);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            model.addAttribute("filmer", filmRepository.findAll());
+            return "filmer";
+        }
+        return "redirect:/filmer";
     }
 
     @PostMapping("byId/delete{produktnummer}")
@@ -62,14 +92,14 @@ public class FilmController {
     @PostMapping("/rent/{produktnummer}")
     public String hyrFilm(@RequestParam String personnummer, @PathVariable Long produktnummer) {
         Kund kund = kundRepository.findByPersonnummer(personnummer);
-        if(kund != null) {
+        if (kund != null) {
             Film film = filmRepository.findByProduktnummer(produktnummer);
             Date uthyrningsdatum = Date.valueOf(LocalDate.now());
             Date senasteInlamning = Date.valueOf(LocalDate.now().plusDays(1));
             uthyrningRepository.save(new Uthyrning(kund, film, uthyrningsdatum, senasteInlamning));
             film.setKund(kund);
             filmRepository.save(film);
-        }else{
+        } else {
             System.out.println("KUND FINNS INTE");
         }
         return "redirect:/filmer";
