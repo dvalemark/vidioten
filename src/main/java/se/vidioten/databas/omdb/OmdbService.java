@@ -71,4 +71,11 @@ public class OmdbService {
         return resultObject;
     }
 
+    public JSONArray getMovieArray(String jsonResponse) throws JSONException {
+        JSONObject jsonObject = new JSONObject(jsonResponse);
+        JSONArray jsonArray = jsonObject.getJSONArray("Search");
+        return jsonArray;
+    }
+
+
 }

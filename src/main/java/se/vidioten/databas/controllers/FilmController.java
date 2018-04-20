@@ -1,6 +1,7 @@
 package se.vidioten.databas.controllers;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import se.vidioten.databas.FoundMovies;
 import se.vidioten.databas.entities.Film;
 import se.vidioten.databas.entities.Kund;
 import se.vidioten.databas.entities.Uthyrning;
@@ -21,6 +23,8 @@ import javax.swing.*;
 import javax.validation.Valid;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -37,6 +41,7 @@ public class FilmController {
     @GetMapping("")
     public String getFilmer(Model model, FilmForm filmForm) {
         model.addAttribute("filmer", filmRepository.findAll());
+        model.addAttribute("data", null);
         return "filmer";
     }
 
@@ -58,7 +63,38 @@ public class FilmController {
         return "filmer";
     }
 
-    @PostMapping("/imdb")
+    @PostMapping("/imdbSearch")
+    public String searchImdbTitle(@RequestParam String title, Model model, FilmForm filmForm) {
+        System.out.println("IMDbSEARCH");
+        List<FoundMovies> titleList = new ArrayList<>();
+        OmdbService omdbService = new OmdbService();
+        String jsonResponse = omdbService.searchMovieByTitle(title, "1bff0c57");
+        if (!jsonResponse.isEmpty()) {
+            JSONArray r = null;
+            try {
+                r = omdbService.getMovieArray(jsonResponse);
+                for (int i = 0; i < r.length() ; i++) {
+                    JSONObject object = (JSONObject) r.get(i);
+                    titleList.add(new FoundMovies(object.getString("Title")));
+                }
+                model.addAttribute("data", titleList);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            model.addAttribute("data", null);
+            return "filmer";
+        }
+
+
+        model.addAttribute("filmer", filmRepository.findAll());
+        System.out.println(titleList);
+
+        return "filmer";
+    }
+
+    @PostMapping("/imdbAdd")
     public String addFilmWithImdb(@RequestParam String title, Model model) {
         OmdbService omdbService = new OmdbService();
         String jsonResponse = omdbService.searchMovieByTitle(title, "1bff0c57");
@@ -77,6 +113,7 @@ public class FilmController {
             }
         } else {
             model.addAttribute("filmer", filmRepository.findAll());
+            model.addAttribute("data",null);
             return "filmer";
         }
         return "redirect:/filmer";

@@ -46,37 +46,60 @@
         </div>
     </nav>
 </header>
-<!--<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="../static/css/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
-</head>-->
 <body>
-<h1 class="text-center">Filmer</h1>
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#imdb">Lägg till film</button>
 
-<form action="#" th:action="@{/filmer/imdb}" method="post">
-    <div class="modal" th:id="imdb">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+
+<h1 class="text-center">Filmer</h1>
+
+<div class="modal" id="imdbResults">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <th:block th:each="film : ${data}">
+                <div th:object="${film}">
+                    <div th:text = "*{title}"></div>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Fyll i filmtitel:</label>
-                        <input title="title" name="title" type="text" class="form-control"
-                               id="title">
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit">Add Movie</button>
-                    </div>
+            </th:block>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+    <button id="imdbSearch" type="button" data-target="#imdb" data-toggle="modal" class="btn btn-info btn-lg">Lägg till film</button>
+
+<div class="modal" id="imdb">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/filmer/imdbSearch}" method="post">
+                    <input title="title" name="title" type="text" class="form-control"
+                           id="imdTitle">
+                    <button id="searchImdb" class="btn btn-primary" type="submit">Search</button>
+                </form>
+                <div class="modal-footer">
+                    <button id="closeImdb" class="btn btn-primary" type="submit">Close</button>
                 </div>
             </div>
         </div>
     </div>
-</form>
+</div>
+
+<div id="searchResults" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Some text in the Modal..</p>
+    </div>
+
+</div>
+
 <!-- Modal -->
 <div id="addMovie" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -205,7 +228,8 @@
             </span>
                 <div>
                 </div>
-                <span><a th:href="@{/filmer/byId/} + ${film.produktnummer}" class="btn btn-primary btn-space">Info</a></span>
+                <span><a th:href="@{/filmer/byId/} + ${film.produktnummer}"
+                         class="btn btn-primary btn-space">Info</a></span>
             </div>
         </div>
     </th:block>
@@ -213,7 +237,8 @@
         <div class="col-md-5">
 
             <!-- Trigger the modal with a button -->
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addMovie">Skapa film</button>
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addMovie">Skapa film
+            </button>
         </div>
         <div class="col-md-7">
             <nav>
@@ -245,6 +270,7 @@
     </div>
 </div>
 
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
@@ -254,5 +280,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+<th:block th:if="${data != NULL}">
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $('#imdbResults').modal('show');
+    });
+</script>
+</th:block>
+
 </body>
 </html>
