@@ -40,7 +40,7 @@ public class FilmController {
     private FilmRepository filmRepository;
     
     @GetMapping("/{alternativ}")
-    public String getFilmer(Model model, FilmForm filmForm, @PathVariable(required = false) String alternativ, @RequestParam(required = false) Integer page) {
+    public String getFilmer(Model model, FilmForm filmForm, @PathVariable String alternativ, @RequestParam(required = false) Integer page) {
         System.out.println(alternativ);
         if (alternativ != null) {
             if (alternativ.equals("Alla")) {
