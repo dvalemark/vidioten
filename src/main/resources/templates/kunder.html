@@ -47,9 +47,9 @@
 <body>
 <h1 class="text-center">Kunder</h1>
 <!-- Trigger the modal with a button -->
-<button id="myButton" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addCustomer">Skapa kund</button>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#createCustomer">Skapa kund</button>
 <!-- Modal -->
-<div id="addCustomer" class="modal fade" role="dialog">
+<div id="createCustomer" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -155,6 +155,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+<th:block th:if="${error != NULL}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#createCustomer').modal('show');
+        });
+    </script>
+</th:block>
+
 </body>
 <footer class="footer">
     <div class="container">

@@ -50,9 +50,13 @@ public class KundController {
     public String addKund(Model model, @Valid KundForm k, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
             kundRepository.save(new Kund(k.getPersonnummer(), k.getNamn(), k.getAddress(), k.getTelefonnummer(), k.getEpost(), k.getPostnummer(), k.getStad(), k.getLand()));
+            model.addAttribute("kunder", kundRepository.findAll());
+            model.addAttribute("error", null);
             return "redirect:/kunder";
+        }else{
+            model.addAttribute("kunder", kundRepository.findAll());
+            model.addAttribute("error", "error");
         }
-        model.addAttribute("kunder", kundRepository.findAll());
         return "kunder";
     }
 
@@ -65,6 +69,7 @@ public class KundController {
 
     @PostMapping("byId/return{personnummer}")
     public String returnMovies(@PathVariable String personnummer) {
+        System.out.println(personnummer);
         List<Film> filmer = filmRepository.findAllByKund_Personnummer(personnummer);
         Date inlamingsdatum = Date.valueOf(LocalDate.now());
         for (Film film : filmer) {

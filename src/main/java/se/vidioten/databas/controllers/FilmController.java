@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import se.vidioten.databas.FoundMovies;
+import se.vidioten.databas.FoundMovie;
 import se.vidioten.databas.entities.Film;
 import se.vidioten.databas.entities.Kund;
 import se.vidioten.databas.entities.Uthyrning;
@@ -19,7 +19,6 @@ import se.vidioten.databas.repositories.FilmRepository;
 import se.vidioten.databas.repositories.KundRepository;
 import se.vidioten.databas.repositories.UthyrningRepository;
 
-import javax.swing.*;
 import javax.validation.Valid;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -37,13 +36,21 @@ public class FilmController {
     private UthyrningRepository uthyrningRepository;
     @Autowired
     private FilmRepository filmRepository;
-
-    @GetMapping("")
-    public String getFilmer(Model model, FilmForm filmForm) {
-        model.addAttribute("filmer", filmRepository.findAll());
+    
+    @GetMapping("/{alternativ}")
+    public String getFilmer(Model model, FilmForm filmForm, @PathVariable(required = false) String alternativ) {
+        System.out.println(alternativ);
+        if (alternativ != null) {
+            if (alternativ.equals("Alla")) {
+                model.addAttribute("filmer", filmRepository.findAll());
+            } else {
+                model.addAttribute("filmer", filmRepository.findAllByKategori(alternativ));
+            }
+        }
         model.addAttribute("data", null);
         return "filmer";
     }
+
 
     @GetMapping("byId/{produktnummer}")
     public String getById(@PathVariable Long produktnummer, Model model, FilmForm filmForm) {
@@ -58,24 +65,25 @@ public class FilmController {
             filmRepository.save(new Film(f.getNamn(), f.getBeskrivning(), f.getUtgivningsdatum(), f.getKategori(), f.getFormat()));
             return "redirect:/filmer";
         }
-        System.out.println(bindingResult.getAllErrors());
+
         model.addAttribute("filmer", filmRepository.findAll());
+        model.addAttribute("error", "error");
         return "filmer";
     }
 
     @PostMapping("/imdbSearch")
     public String searchImdbTitle(@RequestParam String title, Model model, FilmForm filmForm) {
         System.out.println("IMDbSEARCH");
-        List<FoundMovies> titleList = new ArrayList<>();
+        List<FoundMovie> titleList = new ArrayList<>();
         OmdbService omdbService = new OmdbService();
         String jsonResponse = omdbService.searchMovieByTitle(title, "1bff0c57");
         if (!jsonResponse.isEmpty()) {
             JSONArray r = null;
             try {
                 r = omdbService.getMovieArray(jsonResponse);
-                for (int i = 0; i < r.length() ; i++) {
+                for (int i = 0; i < r.length(); i++) {
                     JSONObject object = (JSONObject) r.get(i);
-                    titleList.add(new FoundMovies(object.getString("Title")));
+                    titleList.add(new FoundMovie(object.getString("Title"), object.getString("imdbID")));
                 }
                 model.addAttribute("data", titleList);
 
@@ -86,22 +94,19 @@ public class FilmController {
             model.addAttribute("data", null);
             return "filmer";
         }
-
-
         model.addAttribute("filmer", filmRepository.findAll());
-        System.out.println(titleList);
-
         return "filmer";
     }
 
     @PostMapping("/imdbAdd")
-    public String addFilmWithImdb(@RequestParam String title, Model model) {
+    public String addFilmWithImdb(@RequestParam String imdbId, Model model, FilmForm filmForm) {
+        System.out.println(imdbId);
         OmdbService omdbService = new OmdbService();
-        String jsonResponse = omdbService.searchMovieByTitle(title, "1bff0c57");
+        String jsonResponse = omdbService.searchMovieByImdb(imdbId, "1bff0c57");
         if (!jsonResponse.isEmpty()) {
             JSONObject r = null;
             try {
-                r = omdbService.getMovieObject(jsonResponse);
+                r = new JSONObject(jsonResponse);
                 System.out.println(r.getString("Title"));
                 Film film = new Film(r.getString("Title"), r.getString("Plot"), r.getString("Released"),
                         r.getString("Genre").split(",")[0], "DVD");
@@ -113,10 +118,12 @@ public class FilmController {
             }
         } else {
             model.addAttribute("filmer", filmRepository.findAll());
-            model.addAttribute("data",null);
+            model.addAttribute("data", null);
             return "filmer";
         }
-        return "redirect:/filmer";
+        model.addAttribute("filmer", filmRepository.findAll());
+        model.addAttribute("data", null);
+        return "filmer";
     }
 
     @PostMapping("byId/delete{produktnummer}")

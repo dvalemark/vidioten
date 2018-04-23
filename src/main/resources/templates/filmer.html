@@ -29,13 +29,13 @@
                         Filmer
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="filmer">Alla</a>
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Deckare</a>
-                        <a class="dropdown-item" href="#">Drama</a>
-                        <a class="dropdown-item" href="#">Komedi</a>
-                        <a class="dropdown-item" href="#">Romantik</a>
-                        <a class="dropdown-item" href="#">Thriller</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Alla}">All</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Action}">Action</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Horror}">Horror</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Drama}">Drama</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Adventure}">Adventure</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Comedy}">Comedy</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Fantasy}">Fantasy</a>
                     </div>
                 </li>
             </ul>
@@ -55,23 +55,34 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h1>Sökresultat från imdb</h1>
             </div>
-            <th:block th:each="film : ${data}">
-                <div th:object="${film}">
-                    <div th:text = "*{title}"></div>
-                </div>
-            </th:block>
+            <form method="post" th:action="@{/filmer/imdbAdd}">
+                <table>
+                    <th:block th:each="film : ${data}">
+                        <tr th:object="${film}">
+                            <td>
+                            <span th:text="*{title}"></span>
+                            </td>
+                            <td>
+                            <button name="imdbId" type="submit" class="btn btn-success btn-sm" th:value="*{imdbId}">Lägg till
+                                film
+                            </button>
+                            </td>
+                        </tr>
+                    </th:block>
+                </table>
+            </form>
         </div>
     </div>
 </div>
 
 
+<button id="imdbSearch" type="button" data-target="#imdb" data-toggle="modal" class="btn btn-info btn-lg">Sök imdb
+</button>
 
-
-
-
-
-    <button id="imdbSearch" type="button" data-target="#imdb" data-toggle="modal" class="btn btn-info btn-lg">Lägg till film</button>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addMovie">Skapa film
+</button>
 
 <div class="modal" id="imdb">
     <div class="modal-dialog">
@@ -131,7 +142,7 @@
                     </div>
                     <div class="form-group">
                         <label>Kategori:</label>
-                        <select th:value="*{kategori}" name="kategori">
+                        <select class="form-select-button" th:value="*{kategori}" name="kategori">
                             <option value="Comedy">KOMEDI</option>
                             <option value="Action">ACTION</option>
                             <option value="Romantic">ROMANTIK</option>
@@ -236,9 +247,6 @@
     <div class="row">
         <div class="col-md-5">
 
-            <!-- Trigger the modal with a button -->
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addMovie">Skapa film
-            </button>
         </div>
         <div class="col-md-7">
             <nav>
@@ -282,11 +290,19 @@
         crossorigin="anonymous"></script>
 
 <th:block th:if="${data != NULL}">
-<script type="text/javascript">
-    $( document ).ready(function() {
-        $('#imdbResults').modal('show');
-    });
-</script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#imdbResults').modal('show');
+        });
+    </script>
+</th:block>
+
+<th:block th:if="${error != NULL}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#addMovie').modal('show');
+        });
+    </script>
 </th:block>
 
 </body>

@@ -62,15 +62,6 @@ public class OmdbService {
         return sendGetRequest(requestUrl);
     }
 
-    public JSONObject getMovieObject(String jsonResponse) throws JSONException {
-        JSONObject jsonObject = new JSONObject(jsonResponse);
-        JSONArray jsonArray = jsonObject.getJSONArray("Search");
-        JSONObject object = (JSONObject) jsonArray.get(0);
-        String result = searchMovieByImdb(object.getString("imdbID"), "1bff0c57");
-        JSONObject resultObject = new JSONObject(result);
-        return resultObject;
-    }
-
     public JSONArray getMovieArray(String jsonResponse) throws JSONException {
         JSONObject jsonObject = new JSONObject(jsonResponse);
         JSONArray jsonArray = jsonObject.getJSONArray("Search");
