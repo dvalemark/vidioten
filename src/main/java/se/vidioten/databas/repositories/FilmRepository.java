@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface FilmRepository extends JpaRepository<Film, Long> {
-
+    List<Film> findAllByKategori(String kategori);
     List<Film> findAllByKund_Personnummer(String personnummer);
 
     Film findByProduktnummer(Long produknummer);

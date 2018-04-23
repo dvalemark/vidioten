@@ -41,12 +41,12 @@
                 <!-- Text input-->
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Telefonnummer</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-10">
                         <input type="text" name="telefonnummer" th:value="*{telefonnummer}" class="form-control">
                     </div>
 
                     <label class="col-sm-2 control-label">Epost</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-10">
                         <input type="email" name="epost" th:value="*{epost}" class="form-control">
                     </div>
                 </div>
@@ -82,10 +82,10 @@
                     </div>
                 </div>
             </fieldset>
+        </form>
             <form th:object="${kund}" th:action="@{/kunder/byId/delete} + *{personnummer}" method="post">
                 <button value="deleteKund" type="submit" class="btn btn-danger">Delete</button>
             </form>
-        </form>
         </div>
 
         <div class="col-8">

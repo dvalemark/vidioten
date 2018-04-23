@@ -1,15 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <title>Customer</title>
 </head>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand">Vidioten</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -22,17 +24,18 @@
                     <a class="nav-link" href="uthyrningar">Uthyrda Filmer</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
                         Filmer
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="filmer">Alla</a>
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Deckare</a>
-                        <a class="dropdown-item" href="#">Drama</a>
-                        <a class="dropdown-item" href="#">Komedi</a>
-                        <a class="dropdown-item" href="#">Romantik</a>
-                        <a class="dropdown-item" href="#">Thriller</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Alla}">All</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Action}">Action</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Horror}">Horror</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Drama}">Drama</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Adventure}">Adventure</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Comedy}">Comedy</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Fantasy}">Fantasy</a>
                     </div>
                 </li>
             </ul>
@@ -43,17 +46,71 @@
         </div>
     </nav>
 </header>
-<!--<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="../static/css/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
-</head>-->
 <body>
+
+
 <h1 class="text-center">Filmer</h1>
-<!-- Trigger the modal with a button -->
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addMovie">Skapa film</button>
+
+<div class="modal" id="imdbResults">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>Sökresultat från imdb</h1>
+            </div>
+            <form method="post" th:action="@{/filmer/imdbAdd}">
+                <table>
+                    <th:block th:each="film : ${data}">
+                        <tr th:object="${film}">
+                            <td>
+                            <span th:text="*{title}"></span>
+                            </td>
+                            <td>
+                            <button name="imdbId" type="submit" class="btn btn-success btn-sm" th:value="*{imdbId}">Lägg till
+                                film
+                            </button>
+                            </td>
+                        </tr>
+                    </th:block>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<button id="imdbSearch" type="button" data-target="#imdb" data-toggle="modal" class="btn btn-info btn-lg">Sök imdb
+</button>
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addMovie">Skapa film
+</button>
+
+<div class="modal" id="imdb">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/filmer/imdbSearch}" method="post">
+                    <input title="title" name="title" type="text" class="form-control"
+                           id="imdTitle">
+                    <button id="searchImdb" class="btn btn-primary" type="submit">Search</button>
+                </form>
+                <div class="modal-footer">
+                    <button id="closeImdb" class="btn btn-primary" type="submit">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="searchResults" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Some text in the Modal..</p>
+    </div>
+
+</div>
+
 <!-- Modal -->
 <div id="addMovie" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -85,23 +142,23 @@
                     </div>
                     <div class="form-group">
                         <label>Kategori:</label>
-                        <select th:value="*{kategori}" name="kategori">
-                            <option value="KOMEDI">KOMEDI</option>
-                            <option value="ACTION">ACTION</option>
-                            <option value="ROMANTIK">ROMANTIK</option>
-                            <option value="DRAMA">DRAMA</option>
-                            <option value="THRILLER">THRILLER</option>
-                            <option value="SKRÄCK">SKRÄCK</option>
-                            <option value="DECKARE">DECKARE</option>
+                        <select class="form-select-button" th:value="*{kategori}" name="kategori">
+                            <option value="Comedy">KOMEDI</option>
+                            <option value="Action">ACTION</option>
+                            <option value="Romantic">ROMANTIK</option>
+                            <option value="Drama">DRAMA</option>
+                            <option value="Thriller">THRILLER</option>
+                            <option value="Horror">SKRÄCK</option>
+                            <option value="Crime">KRIMINALARE</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Format:</label>
-                            <select th:value="*{format}" name="format">
-                                <option value="DVD">DVD</option>
-                                <option value="VHS">VHS</option>
-                                <option value="BLURAY">BLURAY</option>
-                            </select>
+                        <select th:value="*{format}" name="format">
+                            <option value="DVD">DVD</option>
+                            <option value="VHS">VHS</option>
+                            <option value="BLURAY">BLURAY</option>
+                        </select>
                     </div>
                     <button value="addFilm" type="submit" class="btn btn-default">Skapa film</button>
                 </form>
@@ -114,56 +171,139 @@
 </div>
 
 
-    <div id="custom_main">
-        <div id="add_custom">
-        </div>
-        <div id="custom_table">
-            <table class="table table-hover">
-                <tr>
-                    <th>Produktnummer</th>
-                    <th>Namn</th>
-                    <th>Kategori</th>
-                    <th>Format</th>
-                    <th>Uthyrd</th>
-                </tr>
-                <th:block th:each="film : ${filmer}">
-                    <tr class="clickable" th:object="${film}">
-                        <td th:text="*{produktnummer}"></td>
-                        <td th:text="*{namn}"></td>
-                        <td th:text="*{kategori}"></td>
-                        <td th:text="*{format}"></td>
-                        <td th:switch="*{kund}">
-                        <button th:case="NULL" class="btn btn-outline-primary" data-toggle="modal" th:data-target="'#rentmovie' + *{produktnummer}">Rent movie</button>
-                            <form action="#" th:action= "@{/filmer/rent/} + *{produktnummer}" method="post">
-                                <div class="modal" th:id="'rentmovie' + *{produktnummer}">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label>Fyll i Personnummer:</label>
-                                                    <input title="personnummer" name="personnummer" type="text" class="form-control" id="personnummer">
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button class="btn btn-primary" type="submit">Rent movie</button>
-                                                </div>
-                                            </div>
-                                        </div>
+<div class="container-fluid">
+    <th:block th:each="film : ${filmer}">
+        <div class="row box-shadow--6dp" th:object="${film}">
+            <div class="col-md-3">
+                <img class="img-thumbnail" alt="Bootstrap Image Preview" height="300" width="200" th:src="*{bild}">
+            </div>
+            <div class="col-md-3">
+                <h4 th:text="*{namn}"></h4>
+                <dl>
+                    <dt>
+                        Handling
+                    </dt>
+                    <dd th:text="*{beskrivning}">
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-3">
+                <dl>
+                    <dt>
+                        IMDB betyg
+                    </dt>
+                    <dd th:text="*{imdb}">
+                    </dd>
+                    <dt>
+                        Utgivningsdatum
+                    </dt>
+                    <dd th:text="*{utgivningsdatum}">
+                    </dd>
+                    <dt>
+                        Kategori
+                    </dt>
+                    <dd th:text="*{kategori}">
+                    </dd>
+                    <dt>
+                        Format
+                    </dt>
+                    <dd th:text="*{format}">
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-3">
+            <span th:switch="*{kund}">
+                <button th:case="NULL" class="btn btn-success" data-toggle="modal"
+                        th:data-target="'#rentmovie' + *{produktnummer}">Rent movie</button>
+                <form action="#" th:action="@{/filmer/rent/} + *{produktnummer}" method="post">
+                    <div class="modal" th:id="'rentmovie' + *{produktnummer}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Fyll i Personnummer:</label>
+                                        <input title="personnummer" name="personnummer" type="text" class="form-control"
+                                               id="personnummer">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-success" type="submit">Rent movie</button>
                                     </div>
                                 </div>
-                            </form>
-                            <span th:case="*" th:text="*{kund.personnummer}"></span>
-                        </td>
-                        <td><a th:href="@{/filmer/byId/} + ${film.produktnummer}" class="btn btn-primary">Info</a></td>
-                    </tr>
-                </th:block>
-            </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <span class="label label-default" th:case="*" th:text="*{kund.personnummer}"></span>
+            </span>
+                <div>
+                </div>
+                <span><a th:href="@{/filmer/byId/} + ${film.produktnummer}"
+                         class="btn btn-primary btn-space">Info</a></span>
+            </div>
+        </div>
+    </th:block>
+    <div class="row">
+        <div class="col-md-5">
+
+        </div>
+        <div class="col-md-7">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">4</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">5</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+<th:block th:if="${data != NULL}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#imdbResults').modal('show');
+        });
+    </script>
+</th:block>
+
+<th:block th:if="${error != NULL}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#addMovie').modal('show');
+        });
+    </script>
+</th:block>
+
 </body>
 </html>
