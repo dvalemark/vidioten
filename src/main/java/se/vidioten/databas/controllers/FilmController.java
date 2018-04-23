@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,11 +39,11 @@ public class FilmController {
     private FilmRepository filmRepository;
     
     @GetMapping("/{alternativ}")
-    public String getFilmer(Model model, FilmForm filmForm, @PathVariable(required = false) String alternativ) {
+    public String getFilmer(Model model, FilmForm filmForm, @PathVariable(required = false) String alternativ, @RequestParam(required = false) Integer page) {
         System.out.println(alternativ);
         if (alternativ != null) {
             if (alternativ.equals("Alla")) {
-                model.addAttribute("filmer", filmRepository.findAll());
+                model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10)));
             } else {
                 model.addAttribute("filmer", filmRepository.findAllByKategori(alternativ));
             }
@@ -130,7 +131,7 @@ public class FilmController {
     public String deleteFilm(@PathVariable Long produktnummer) {
         Film film = filmRepository.findByProduktnummer(produktnummer);
         filmRepository.delete(film);
-        return "redirect:/filmer";
+        return "redirect:/filmer/Alla";
     }
 
     @PostMapping("/rent/{produktnummer}")
@@ -146,7 +147,7 @@ public class FilmController {
         } else {
             System.out.println("KUND FINNS INTE");
         }
-        return "redirect:/filmer";
+        return "redirect:/filmer/Alla";
     }
 
     @PostMapping("byId/{produktnummer}")
@@ -161,7 +162,7 @@ public class FilmController {
             film.setUtgivningsdatum(f.getUtgivningsdatum());
             film.setKund(f.getKund());
             filmRepository.save(film);
-            return "redirect:/filmer";
+            return "redirect:/filmer/Alla";
         }
         model.addAttribute("filmer", filmRepository.findAll());
         return "filmer";
