@@ -120,7 +120,7 @@ public class Kund {
     public void setLand(String land) {
         this.land = land;
     }
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "kund")
+    @OneToMany(mappedBy = "kund")
     public List<Film> getFilmer() {
         return filmer;
     }
