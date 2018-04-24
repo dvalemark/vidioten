@@ -33,7 +33,8 @@
                         <a class="dropdown-item" th:href="@{../filmer/Action}">Action</a>
                         <a class="dropdown-item" th:href="@{../filmer/Horror}">Horror</a>
                         <a class="dropdown-item" th:href="@{../filmer/Drama}">Drama</a>
-                        <a class="dropdown-item" th:href="@{../filmer/Adventure}">Adventure</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Crime}">Crime</a>
+                        <a class="dropdown-item" th:href="@{../filmer/Biography}">Biography</a>
                         <a class="dropdown-item" th:href="@{../filmer/Comedy}">Comedy</a>
                         <a class="dropdown-item" th:href="@{../filmer/Fantasy}">Fantasy</a>
                     </div>
@@ -120,7 +121,7 @@
                 <h4 class="modal-title">Fyll i filmuppgifter</h4>
             </div>
             <div class="modal-body">
-                <form th:object="${filmForm}" method="post">
+                <form th:action="@{/filmer/addMovie}" th:object="${filmForm}" method="post">
                     <div class="form-group">
                         <label>Titel:</label>
                         <input th:value="*{namn}" name="namn" type="text" class="form-control"
@@ -250,27 +251,9 @@
         </div>
         <div class="col-md-7">
             <nav>
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#">Previous</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">4</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">5</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                <ul class="nav nav-pills">
+                    <li class="nav-item" th:if="${filmer.totalPages != null}" th:each="i : ${#numbers.sequence(0,filmer.totalPages-1)}">
+                        <a th:text="${i+1}" class="page-link" th:href="${#httpServletRequest.requestURI + '?page=' + i}"></a>
                     </li>
                 </ul>
             </nav>
