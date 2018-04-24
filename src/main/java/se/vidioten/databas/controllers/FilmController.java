@@ -41,7 +41,9 @@ public class FilmController {
     private FilmRepository filmRepository;
     
     @GetMapping("/{alternativ}")
+
     public String getFilmer(Model model, FilmForm filmForm, @PathVariable(required = false) String alternativ, @RequestParam(required = false) Integer page) {
+
         if (alternativ != null) {
             if (alternativ.equals("Alla")) {
                 model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10)));
