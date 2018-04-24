@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.vidioten.databas.FoundMovie;
 import se.vidioten.databas.entities.Film;
 import se.vidioten.databas.entities.Kund;
@@ -40,14 +41,17 @@ public class FilmController {
     private FilmRepository filmRepository;
     
     @GetMapping("/{alternativ}")
-    public String getFilmer(Model model, FilmForm filmForm, @PathVariable String alternativ, @RequestParam(required = false) Integer page) {
-        System.out.println(alternativ);
+
+    public String getFilmer(Model model, FilmForm filmForm, @PathVariable(required = false) String alternativ, @RequestParam(required = false) Integer page) {
+
         if (alternativ != null) {
             if (alternativ.equals("Alla")) {
                 model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10)));
             } else {
                 model.addAttribute("filmer", filmRepository.findAllByKategori(alternativ, PageRequest.of(page != null ? page : 0, 10) ));
             }
+        }else{
+            model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10)));
         }
         model.addAttribute("data", null);
         return "filmer";
@@ -60,17 +64,13 @@ public class FilmController {
         return "film";
     }
 
-    @PostMapping("")
+    @PostMapping("addMovie")
     public String addFilm(Model model, @Valid FilmForm f, BindingResult bindingResult) {
-
         if (!bindingResult.hasErrors()) {
             filmRepository.save(new Film(f.getNamn(), f.getBeskrivning(), f.getUtgivningsdatum(), f.getKategori(), f.getFormat()));
-            return "redirect:/filmer";
+            return "redirect:/filmer/Alla";
         }
-
-        model.addAttribute("filmer", filmRepository.findAll());
-        model.addAttribute("error", "error");
-        return "filmer";
+        return "redirect:/filmer/Alla";
     }
 
     @PostMapping("/imdbSearch")
@@ -88,15 +88,15 @@ public class FilmController {
                     titleList.add(new FoundMovie(object.getString("Title"), object.getString("imdbID")));
                 }
                 model.addAttribute("data", titleList);
-
+                model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(0, 10)));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
             model.addAttribute("data", null);
-            return "filmer";
+            return "redirect:/filmer/Alla";
         }
-        model.addAttribute("filmer", filmRepository.findAll());
+
         return "filmer";
     }
 
@@ -119,17 +119,13 @@ public class FilmController {
                 e.printStackTrace();
             }
         } else {
-            model.addAttribute("filmer", filmRepository.findAll());
-            model.addAttribute("data", null);
-            return "filmer";
+            return "redirect:/filmer/Alla";
         }
-        model.addAttribute("filmer", filmRepository.findAll());
-        model.addAttribute("data", null);
-        return "filmer";
+        return "redirect:/filmer/Alla";
     }
 
     @PostMapping("byId/delete{produktnummer}")
-    public String deleteFilm(@PathVariable Long produktnummer) {
+    public String deleteFilm(@PathVariable Long produktnummer, Model model) {
         Film film = filmRepository.findByProduktnummer(produktnummer);
         filmRepository.delete(film);
         return "redirect:/filmer/Alla";
@@ -166,6 +162,6 @@ public class FilmController {
             return "redirect:/filmer/Alla";
         }
         model.addAttribute("filmer", filmRepository.findAll());
-        return "filmer";
+        return "redirect:/filmer/Alla";
     }
 }
