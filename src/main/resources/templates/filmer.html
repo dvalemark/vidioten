@@ -39,6 +39,7 @@
                         <a class="dropdown-item" th:href="@{../filmer/Fantasy}">Fantasy</a>
                     </div>
                 </li>
+                <li><a class="nav-link" th:href="@{/logout}">Logout</a></li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Sök" aria-label="Search">
@@ -48,8 +49,6 @@
     </nav>
 </header>
 <body>
-
-
 <h1 class="text-center">Filmer</h1>
 
 <div class="modal" id="imdbResults">
@@ -63,12 +62,13 @@
                     <th:block th:each="film : ${data}">
                         <tr th:object="${film}">
                             <td>
-                            <span th:text="*{title}"></span>
+                                <span th:text="*{title}"></span>
                             </td>
                             <td>
-                            <button name="imdbId" type="submit" class="btn btn-success btn-sm" th:value="*{imdbId}">Lägg till
-                                film
-                            </button>
+                                <button name="imdbId" type="submit" class="btn btn-success btn-sm" th:value="*{imdbId}">
+                                    Lägg till
+                                    film
+                                </button>
                             </td>
                         </tr>
                     </th:block>
@@ -210,6 +210,11 @@
                     </dt>
                     <dd th:text="*{format}">
                     </dd>
+                    <dt>
+                        Produktnummer
+                    </dt>
+                    <dd th:text="*{produktnummer}">
+                    </dd>
                 </dl>
             </div>
             <div class="col-md-3">
@@ -247,13 +252,14 @@
     </th:block>
     <div class="row">
         <div class="col-md-5">
-
         </div>
         <div class="col-md-7">
             <nav>
                 <ul class="nav nav-pills">
-                    <li class="nav-item" th:if="${filmer.totalPages != null}" th:each="i : ${#numbers.sequence(0,filmer.totalPages-1)}">
-                        <a th:text="${i+1}" class="page-link" th:href="${#httpServletRequest.requestURI + '?page=' + i}"></a>
+                    <li class="nav-item" th:if="${filmer.totalPages != null}"
+                        th:each="i : ${#numbers.sequence(0,filmer.totalPages-1)}">
+                        <a th:text="${i+1}" class="page-link"
+                           th:href="${#httpServletRequest.requestURI + '?page=' + i}"></a>
                     </li>
                 </ul>
             </nav>

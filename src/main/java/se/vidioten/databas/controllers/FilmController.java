@@ -46,7 +46,7 @@ public class FilmController {
             if (alternativ.equals("Alla")) {
                 model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10)));
             } else {
-                model.addAttribute("filmer", filmRepository.findAllByKategori(alternativ, PageRequest.of(page != null ? page : 0, 10) ));
+                model.addAttribute("filmer", filmRepository.findAllByKategoriOrderByProduktnummerDesc(alternativ, PageRequest.of(page != null ? page : 0, 10) ));
             }
         }else{
             model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10)));
