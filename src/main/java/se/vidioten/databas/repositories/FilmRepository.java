@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface FilmRepository extends JpaRepository<Film, Long> {
-   // Page<Film> findAllBy(org.springframework.data.domain.Pageable pageable);
+
     Page<Film> findAllByKategoriOrderByProduktnummerDesc(String kategori, org.springframework.data.domain.Pageable pageable);
     List<Film> findAllByKund_Personnummer(String personnummer);
 

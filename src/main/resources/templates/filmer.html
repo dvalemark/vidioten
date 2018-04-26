@@ -286,11 +286,15 @@
     </script>
 </th:block>
 
-<th:block th:if="${error != NULL}">
+<th:block th:if="${(param.movieError != null)}">
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#addMovie').modal('show');
-        });
+            alert("Filmen finns inte!");
+    </script>
+</th:block>
+
+<th:block th:if="${(param.customerError != null)}">
+    <script type="text/javascript">
+        alert("Personnummret existerar inte");
     </script>
 </th:block>
 

@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,12 +45,12 @@ public class FilmController {
     public String getFilmer(Model model, FilmForm filmForm, @PathVariable(required = false) String alternativ, @RequestParam(required = false) Integer page) {
         if (alternativ != null) {
             if (alternativ.equals("Alla")) {
-                model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10)));
+                model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10, Sort.Direction.DESC, "produktnummer")));
             } else {
                 model.addAttribute("filmer", filmRepository.findAllByKategoriOrderByProduktnummerDesc(alternativ, PageRequest.of(page != null ? page : 0, 10) ));
             }
         }else{
-            model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10)));
+            model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(page != null ? page : 0, 10, Sort.Direction.DESC, "produktnummer")));
         }
         model.addAttribute("data", null);
         return "filmer";
@@ -77,7 +78,8 @@ public class FilmController {
         List<FoundMovie> titleList = new ArrayList<>();
         OmdbService omdbService = new OmdbService();
         String jsonResponse = omdbService.searchMovieByTitle(title, "1bff0c57");
-        if (!jsonResponse.isEmpty()) {
+
+        if (!jsonResponse.contains("Movie not found!")) {
             JSONArray r = null;
             try {
                 r = omdbService.getMovieArray(jsonResponse);
@@ -86,13 +88,12 @@ public class FilmController {
                     titleList.add(new FoundMovie(object.getString("Title"), object.getString("imdbID")));
                 }
                 model.addAttribute("data", titleList);
-                model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(0, 10)));
+                model.addAttribute("filmer", filmRepository.findAll(PageRequest.of(0, 10, Sort.Direction.DESC, "produktnummer")));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
-            model.addAttribute("data", null);
-            return "redirect:/filmer/Alla";
+            return "redirect:/filmer/Alla?movieError=notFoundMovie";
         }
 
         return "filmer";
@@ -140,7 +141,7 @@ public class FilmController {
             film.setKund(kund);
             filmRepository.save(film);
         } else {
-            System.out.println("KUND FINNS INTE");
+            return "redirect:/filmer/Alla?customerError=notFoundCustomer";
         }
         return "redirect:/filmer/Alla";
     }
