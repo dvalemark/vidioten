@@ -5,10 +5,7 @@ import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import se.vidioten.databas.entities.Film;
 import se.vidioten.databas.entities.Kund;
@@ -19,6 +16,7 @@ import se.vidioten.databas.repositories.KundRepository;
 import se.vidioten.databas.repositories.UthyrningRepository;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -99,6 +97,19 @@ public class KundController {
         }
         model.addAttribute("kunder", kundRepository.findAll());
         return "kunder";
+    }
+
+    @GetMapping("searchById")
+    public String getOneKund(Model model, @RequestParam(required = false) String personnummer, KundForm kundForm){
+        if(kundRepository.findByPersonnummer(personnummer) != null){
+            model.addAttribute("kunder", kundRepository.findByPersonnummer(personnummer));
+            return "kunder";
+        }else if(kundRepository.findByNamn(personnummer).size() != 0) {
+            model.addAttribute("kunder", kundRepository.findByNamn(personnummer));
+            return "kunder";
+        }else {
+          return "redirect:/kunder?error=customerNotFound";
+        }
     }
 
 

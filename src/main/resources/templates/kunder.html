@@ -38,8 +38,8 @@
                 </li>
                 <li><a class="nav-link" th:href="@{/logout}">Logout</a></li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Sök" aria-label="Search">
+            <form th:action="@{/kunder/searchById}" class="form-inline my-2 my-lg-0" method="get">
+                <input class="form-control mr-sm-2" type="search" name="personnummer" placeholder="Sök" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sök</button>
             </form>
         </div>
@@ -161,6 +161,12 @@
         $(document).ready(function () {
             $('#createCustomer').modal('show');
         });
+    </script>
+</th:block>
+
+<th:block th:if="${(param.error != null)}">
+    <script type="text/javascript">
+        alert("KUNDEN EXISTERAR INTE!");
     </script>
 </th:block>
 

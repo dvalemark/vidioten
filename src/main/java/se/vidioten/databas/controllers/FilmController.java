@@ -145,7 +145,6 @@ public class FilmController {
         }
         return "redirect:/filmer/Alla";
     }
-
     @PostMapping("byId/{produktnummer}")
     public String updateFilm(Model model, @Valid FilmForm f, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
@@ -163,4 +162,15 @@ public class FilmController {
         model.addAttribute("filmer", filmRepository.findAll());
         return "redirect:/filmer/Alla";
     }
+
+    @GetMapping("searchById")
+    public String getOneKund(Model model, @RequestParam(required = false) Long produktnummer, @RequestParam(required = false) String namn, FilmForm filmForm){
+        if(filmRepository.findByProduktnummerOrNamn(produktnummer,namn,PageRequest.of(0, 10)).getSize() != 0){
+            model.addAttribute("filmer", filmRepository.findByProduktnummerOrNamn(produktnummer,namn, PageRequest.of(0, 10)));
+            return "filmer";
+        }else{
+            return "redirect:/filmer/Alla?error=movieNotFound";
+        }
+    }
+
 }
